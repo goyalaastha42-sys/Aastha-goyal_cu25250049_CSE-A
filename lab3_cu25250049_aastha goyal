@@ -1,0 +1,128 @@
+#include <iostream>
+using namespace std;
+
+// Node
+class Node {
+public:
+    int data;
+    Node* next;
+
+    Node(int value) {
+        data = value;
+        next = NULL;
+    }
+};
+
+
+// Stack
+class Stack {
+public:
+    Node* top;
+
+    Stack() {
+        top = NULL;
+    }
+
+    // Push operation
+    void push(int value) {
+        Node* newNode = new Node(value);
+
+        newNode->next = top;
+        top = newNode;
+
+        cout << value << " pushed into stack" << endl;
+    }
+
+    // Pop operation
+    void pop() {
+        if (top == NULL) {
+            cout << "Stack is empty" << endl;
+        }
+        else {
+            cout << top->data << " popped from stack" << endl;
+
+            Node* temp = top;
+            top = top->next;
+
+            delete temp;
+        }
+    }
+};
+
+
+// Queue
+class Queue {
+public:
+    Node* front;
+    Node* rear;
+
+    Queue() {
+        front = NULL;
+        rear = NULL;
+    }
+
+    // Enqueue operation
+    void enqueue(int value) {
+        Node* newNode = new Node(value);
+
+        if (rear == NULL) {
+            front = rear = newNode;
+        }
+        else {
+            rear->next = newNode;
+            rear = newNode;
+        }
+
+        cout << value << " added to queue" << endl;
+    }
+
+    // Dequeue operation
+    void dequeue() {
+        if (front == NULL) {
+            cout << "Queue is empty" << endl;
+        }
+        else {
+            cout << front->data << " removed from queue" << endl;
+
+            Node* temp = front;
+            front = front->next;
+
+            if (front == NULL) {
+                rear = NULL;
+            }
+
+            delete temp;
+        }
+    }
+};
+
+
+int main() {
+
+    // Stack
+    cout << "----- STACK -----" << endl;
+
+    Stack s;
+
+    s.push(10);
+    s.push(20);
+    s.push(30);
+
+    s.pop();
+    s.pop();
+
+
+    // Queue
+    cout << "\n----- QUEUE -----" << endl;
+
+    Queue q;
+
+    q.enqueue(10);
+    q.enqueue(20);
+    q.enqueue(30);
+
+    q.dequeue();
+    q.dequeue();
+
+    return 0;
+}
