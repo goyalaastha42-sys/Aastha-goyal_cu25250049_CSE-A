@@ -1,0 +1,312 @@
+/*#include <iostream>
+#include <string>
+using namespace std;
+
+class Stack {
+    char arr[100];
+    int top;
+
+public:
+    Stack() {
+        top = -1;
+    }
+
+    void push(char x) {
+        arr[++top] = x;
+    }
+
+    char pop() {
+        return arr[top--];
+    }
+
+    char peek() {
+        return arr[top];
+    }
+
+    bool isEmpty() {
+        return top == -1;
+    }
+};
+
+int precedence(char op) {
+    if (op == '^')
+        return 3;
+    if (op == '*' || op == '/')
+        return 2;
+    if (op == '+' || op == '-')
+        return 1;
+
+    return 0;
+}
+
+int main() {
+    string infix, postfix = "";
+
+    cout << "Enter infix expression: ";
+    cin >> infix;
+
+    Stack s;
+
+    for (int i = 0; i < infix.length(); i++) {
+        char ch = infix[i];
+
+        // If operand
+        if (isalnum(ch)) {
+            postfix += ch;
+        }
+
+        // If '('
+        else if (ch == '(') {
+            s.push(ch);
+        }
+
+        // If ')'
+        else if (ch == ')') {
+            while (!s.isEmpty() && s.peek() != '(') {
+                postfix += s.pop();
+            }
+            s.pop(); // remove '('
+        }
+
+        // If operator
+        else {
+            while (!s.isEmpty() &&
+                   precedence(s.peek()) >= precedence(ch)) {
+                postfix += s.pop();
+            }
+
+            s.push(ch);
+        }
+    }
+
+    // Pop remaining operators
+    while (!s.isEmpty()) {
+        postfix += s.pop();
+    }
+
+    cout << "Postfix expression: " << postfix << endl;
+
+    return 0;
+}*/
+
+/*
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Stack {
+    int arr[100];
+    int top;
+
+public:
+    Stack() {
+        top = -1;
+    }
+
+    void push(int x) {
+        arr[++top] = x;
+    }
+
+    int pop() {
+        return arr[top--];
+    }
+};
+
+int main() {
+    string postfix;
+
+    cout << "Enter postfix expression: ";
+    cin >> postfix;
+
+    Stack s;
+
+    for (int i = 0; i < postfix.length(); i++) {
+        char ch = postfix[i];
+
+        // If number
+        if (isdigit(ch)) {
+            s.push(ch - '0');
+        }
+
+        // If operator
+        else {
+            int b = s.pop();
+            int a = s.pop();
+
+            int result;
+
+            if (ch == '+')
+                result = a + b;
+            else if (ch == '-')
+                result = a - b;
+            else if (ch == '*')
+                result = a * b;
+            else if (ch == '/')
+                result = a / b;
+
+            s.push(result);
+        }
+    }
+
+    cout << "Result = " << s.pop() << endl;
+
+    return 0;
+}*/
+
+
+
+#include <iostream>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* left;
+    Node* right;
+};
+
+// Create a new node
+Node* createNode(int value) {
+    Node* newNode = new Node();
+
+    newNode->data = value;
+    newNode->left = NULL;
+    newNode->right = NULL;
+
+    return newNode;
+}
+
+// Insert a node
+Node* insert(Node* root, int value) {
+
+    if (root == NULL) {
+        return createNode(value);
+    }
+
+    if (value < root->data) {
+        root->left = insert(root->left, value);
+    }
+    else if (value > root->data) {
+        root->right = insert(root->right, value);
+    }
+
+    return root;
+}
+
+// Find minimum value
+Node* findMin(Node* root) {
+
+    while (root->left != NULL) {
+        root = root->left;
+    }
+
+    return root;
+}
+
+// Delete a node
+Node* deleteNode(Node* root, int value) {
+
+    if (root == NULL) {
+        return root;
+    }
+
+    // Search in left subtree
+    if (value < root->data) {
+        root->left = deleteNode(root->left, value);
+    }
+
+    // Search in right subtree
+    else if (value > root->data) {
+        root->right = deleteNode(root->right, value);
+    }
+
+    // Node found
+    else {
+
+        // No left child
+        if (root->left == NULL) {
+            Node* temp = root->right;
+            delete root;
+            return temp;
+        }
+
+        // No right child
+        else if (root->right == NULL) {
+            Node* temp = root->left;
+            delete root;
+            return temp;
+        }
+
+        // Two children
+        Node* temp = findMin(root->right);
+
+        root->data = temp->data;
+
+        root->right = deleteNode(root->right, temp->data);
+    }
+
+    return root;
+}
+
+// Inorder: Left Root Right
+void inorder(Node* root) {
+
+    if (root != NULL) {
+        inorder(root->left);
+        cout << root->data << " ";
+        inorder(root->right);
+    }
+}
+
+// Preorder: Root Left Right
+void preorder(Node* root) {
+
+    if (root != NULL) {
+        cout << root->data << " ";
+        preorder(root->left);
+        preorder(root->right);
+    }
+}
+
+// Postorder: Left Right Root
+void postorder(Node* root) {
+
+    if (root != NULL) {
+        postorder(root->left);
+        postorder(root->right);
+        cout << root->data << " ";
+    }
+}
+
+int main() {
+
+    Node* root = NULL;
+
+    // Insert values
+    root = insert(root, 50);
+    root = insert(root, 30);
+    root = insert(root, 70);
+    root = insert(root, 20);
+    root = insert(root, 40);
+    root = insert(root, 60);
+    root = insert(root, 80);
+
+    cout << "Inorder Traversal: ";
+    inorder(root);
+
+    cout << "\nPreorder Traversal: ";
+    preorder(root);
+
+    cout << "\nPostorder Traversal: ";
+    postorder(root);
+
+    // Delete a node
+    cout << "\n\nDeleting 30...\n";
+    root = deleteNode(root, 30);
+
+    cout << "Inorder after deletion: ";
+    inorder(root);
+
+    cout << endl;
+
+    return 0;
+}
