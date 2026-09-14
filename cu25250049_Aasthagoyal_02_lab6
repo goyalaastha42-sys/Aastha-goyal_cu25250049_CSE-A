@@ -1,0 +1,98 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    vector<int> a = {-3, 1, 2, 5, 6, -3, 8, 1, 9, 2};
+
+    sort(a.begin(), a.end());
+
+    for (int i = 0; i < a.size() - 2; i++) {
+
+        if (i > 0 && a[i] == a[i - 1])
+            continue;
+
+        int left = i + 1;
+        int right = a.size() - 1;
+
+        while (left < right) {
+            int sum = a[i] + a[left] + a[right];
+
+            if (sum == 0) {
+                cout << a[i] << " " << a[left] << " " << a[right] << endl;
+
+                left++;
+                right--;
+
+                while (left < right && a[left] == a[left - 1])
+                    left++;
+
+                while (left < right && a[right] == a[right + 1])
+                    right--;
+            }
+            else if (sum < 0) {
+                left++;
+            }
+            else {
+                right--;
+            }
+        }
+    }
+
+    return 0;
+}
+
+
+
+/*#include <iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cout << "Enter number of terms: ";
+    cin >> n;
+
+    int a = 1, b = 1;
+
+    for (int i = 1; i <= n; i++) {
+        cout << a << " ";
+
+        int c = a + b;
+        a = b;
+        b = c;
+    }
+
+    return 0;
+}*/
+
+/*#include <iostream>
+using namespace std;
+
+void tower(int n, char source, char helper, char destination) {
+    if (n == 1) {
+        cout << "Move disk 1 from " << source
+             << " to " << destination << endl;
+        return;
+    }
+
+    tower(n - 1, source, destination, helper);
+
+    cout << "Move disk " << n << " from " << source
+         << " to " << destination << endl;
+
+    tower(n - 1, helper, source, destination);
+}
+
+int main() {
+    int n;
+
+    cout << "Enter number of disks: ";
+    cin >> n;
+
+    tower(n, 'A', 'B', 'C');
+
+    return 0;
+}
+*/
+
