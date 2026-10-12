@@ -1,0 +1,42 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int hammingDistance(int a, int k) {
+    return __builtin_popcount(a ^ k);
+}
+
+void solve() {
+    int n, k;
+    cin >> n >> k;
+
+    vector<int> a(n);
+    for (int i = 0; i < n; i++) {
+        cin >> a[i];
+    }
+
+    sort(a.begin(), a.end(), [k](int x, int y) {
+        int dx = hammingDistance(x, k);
+        int dy = hammingDistance(y, k);
+
+        if (dx == dy)
+            return x < y;
+
+        return dx < dy;
+    });
+
+    for (int x : a) {
+        cout << x << " ";
+    }
+    cout << "\n";
+}
+
+int main() {
+    int t;
+    cin >> t;
+
+    while (t--) {
+        solve();
+    }
+
+    return 0;
+}
