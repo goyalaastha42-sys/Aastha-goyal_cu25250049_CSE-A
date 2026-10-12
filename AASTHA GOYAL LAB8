@@ -1,0 +1,146 @@
+/*#include <iostream>
+#include <vector>
+using namespace std;
+
+int main() {
+    int N, K;
+
+    cin >> N >> K;
+
+    vector<int> arr(N);
+
+    for (int i = 0; i < N; i++) {
+        cin >> arr[i];
+    }
+
+    // Find sum of first K elements
+    int windowSum = 0;
+
+    for (int i = 0; i < K; i++) {
+        windowSum += arr[i];
+    }
+
+    int maxSum = windowSum;
+
+    // Slide the window
+    for (int i = K; i < N; i++) {
+        windowSum = windowSum - arr[i - K] + arr[i];
+
+        if (windowSum > maxSum) {
+            maxSum = windowSum;
+        }
+    }
+
+    cout << "Maximum sum = " << maxSum;
+
+    return 0;
+}*/
+
+
+
+
+
+
+
+/*#include <iostream>
+#include <unordered_set>
+using namespace std;
+
+int main() {
+    string s;
+    cin >> s;
+
+    unordered_set<char> seen;
+
+    int left = 0;
+    int maxLength = 0;
+
+    for (int right = 0; right < s.length(); right++) {
+
+        // If character is already present
+        while (seen.find(s[right]) != seen.end()) {
+            seen.erase(s[left]);
+            left++;
+        }
+
+        // Add current character
+        seen.insert(s[right]);
+
+        // Calculate current window length
+        int length = right - left + 1;
+
+        if (length > maxLength) {
+            maxLength = length;
+        }
+    }
+
+    cout << "Length = " << maxLength;
+
+    return 0;
+}*/
+
+
+
+#include <iostream>
+#include <vector>
+#include <climits>
+using namespace std;
+
+struct Edge {
+    int u;
+    int v;
+    int weight;
+};
+
+int main() {
+    int N, M, K;
+
+    cin >> N >> M >> K;
+
+    vector<Edge> edges(M);
+
+    // Input edges
+    for (int i = 0; i < M; i++) {
+        cin >> edges[i].u
+            >> edges[i].v
+            >> edges[i].weight;
+    }
+
+    const int INF = INT_MAX / 2;
+
+    // dist[v] = minimum cost to reach v
+    // using the allowed number of edges
+    vector<int> dist(N + 1, INF);
+
+    dist[1] = 0;
+
+    // Allow at most K edges
+    for (int step = 1; step <= K; step++) {
+
+        vector<int> newDist = dist;
+
+        for (Edge e : edges) {
+
+            // u -> v
+            if (dist[e.u] + e.weight < newDist[e.v]) {
+                newDist[e.v] = dist[e.u] + e.weight;
+            }
+
+            // v -> u because graph is undirected
+            if (dist[e.v] + e.weight < newDist[e.u]) {
+                newDist[e.u] = dist[e.v] + e.weight;
+            }
+        }
+
+        dist = newDist;
+    }
+
+    if (dist[N] == INF) {
+        cout << -1;
+    }
+    else {
+        cout << "Minimum path weight = " << dist[N];
+    }
+
+    return 0;
+}
