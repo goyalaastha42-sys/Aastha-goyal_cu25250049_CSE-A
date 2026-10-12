@@ -1,0 +1,40 @@
+```cpp
+#include <iostream>
+#include <vector>
+#include <cstdlib>
+using namespace std;
+
+void solve() {
+    int N;
+    cin >> N;
+
+    vector<int> A(N);
+
+    for (int i = 0; i < N; i++) {
+        cin >> A[i];
+    }
+
+    // Check whether it is possible
+    // For this interpretation, every element can be made zero.
+    // Minimum operations = sum of absolute values.
+
+    int operations = 0;
+
+    for (int i = 0; i < N; i++) {
+        operations += abs(A[i]);
+    }
+
+    cout << operations << endl;
+}
+
+int main() {
+    int T;
+    cin >> T;
+
+    while (T--) {
+        solve();
+    }
+
+    return 0;
+}
+
